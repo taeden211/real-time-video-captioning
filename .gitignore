@@ -1,5 +1,4 @@
 .env
 __pycache__/
-dataset/
+data/
 output/
-filtered_dataset/
