@@ -1,0 +1,58 @@
+{
+  "scene_description": "흙바닥 작업장 좌측에 굴착기 1대가 버킷을 들어 올린 채 정지해 있다.",
+  "objects": [
+    {
+      "id": "excavator_1",
+      "label": "굴착기",
+      "attributes": {
+        "ppe": [],
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 좌측"
+    },
+    {
+      "id": "soil_1",
+      "label": "토사",
+      "attributes": {
+        "ppe": [],
+        "state": []
+      },
+      "location": "화면 하단 전면"
+    },
+    {
+      "id": "barrier_1",
+      "label": "방호울타리",
+      "attributes": {
+        "ppe": [],
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 중앙 뒤쪽"
+    },
+    {
+      "id": "structure_1",
+      "label": "콘크리트구조물",
+      "attributes": {
+        "ppe": [],
+        "state": []
+      },
+      "location": "화면 상단 뒤쪽"
+    }
+  ],
+  "relationships": [
+    {
+      "subject_id": "excavator_1",
+      "relation": "on",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "barrier_1",
+      "relation": "below",
+      "object_id": "structure_1"
+    }
+  ],
+  "hazards": []
+}
