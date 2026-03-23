@@ -1,0 +1,235 @@
+{
+  "scene_description": "넓은 토공 작업장에 덤프트럭, 굴착기, 로더, 이동식크레인이 보인다. 중앙의 덤프트럭 적재함이 들어 올려져 있으며, 지면에는 토사와 파이프 자재가 놓여 있다. 원거리에는 타워크레인과 건축 중인 건물이 보인다.",
+  "objects": [
+    {
+      "id": "mobile_crane_1",
+      "label": "이동식크레인",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 좌측 중단"
+    },
+    {
+      "id": "loader_1",
+      "label": "로더",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 좌측 하단"
+    },
+    {
+      "id": "worker_1",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [],
+        "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 좌측 하단 중앙"
+    },
+    {
+      "id": "pipe_1",
+      "label": "파이프",
+      "attributes": {
+        "state": [
+          "적치됨"
+        ]
+      },
+      "location": "화면 좌측 중앙 지면"
+    },
+    {
+      "id": "excavator_1",
+      "label": "굴착기",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 중앙 좌측"
+    },
+    {
+      "id": "small_truck_1",
+      "label": "소형트럭",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 중앙"
+    },
+    {
+      "id": "car_1",
+      "label": "승용차",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 중앙 뒤쪽"
+    },
+    {
+      "id": "dump_truck_1",
+      "label": "덤프트럭",
+      "attributes": {
+        "state": [
+          "적재 중"
+        ]
+      },
+      "location": "화면 중앙 우측"
+    },
+    {
+      "id": "pipe_2",
+      "label": "파이프",
+      "attributes": {
+        "state": [
+          "적치됨"
+        ]
+      },
+      "location": "화면 우측 중앙"
+    },
+    {
+      "id": "small_truck_2",
+      "label": "소형트럭",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 우측 가장자리"
+    },
+    {
+      "id": "tower_crane_1",
+      "label": "타워크레인",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 중앙 상단 원거리"
+    },
+    {
+      "id": "tower_crane_2",
+      "label": "타워크레인",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 우측 상단 원거리"
+    },
+    {
+      "id": "soil_1",
+      "label": "토사",
+      "attributes": {
+        "state": [
+          "쌓임"
+        ]
+      },
+      "location": "화면 전경 전반"
+    }
+  ],
+  "relationships": [
+    {
+      "subject_id": "worker_1",
+      "Functional": "",
+      "Structural": "",
+      "Spatial": "in_front_of",
+      "Safety-critical": "too_close_to",
+      "object_id": "loader_1"
+    },
+    {
+      "subject_id": "pipe_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "pipe_2",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "dump_truck_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "loader_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "excavator_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "small_truck_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "small_truck_2",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "car_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "soil_1"
+    },
+    {
+      "subject_id": "small_truck_2",
+      "Functional": "",
+      "Structural": "",
+      "Spatial": "next_to",
+      "Safety-critical": "",
+      "object_id": "pipe_2"
+    }
+  ],
+  "hazards": [
+    {
+      "related_object_ids": [
+        "worker_1",
+        "loader_1"
+      ],
+      "hazard": "충돌",
+      "reason": "근로자가 로더 앞쪽 가까운 위치에 서 있다."
+    },
+    {
+      "related_object_ids": [
+        "dump_truck_1"
+      ],
+      "hazard": "전도",
+      "reason": "덤프트럭 적재함이 높게 들어 올려진 상태이다."
+    }
+  ]
+}

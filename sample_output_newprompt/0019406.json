@@ -1,0 +1,96 @@
+{
+  "scene_description": "안개 낀 수역 옆에 대형 콘크리트구조물이 길게 설치되어 있다. 구조물 상부에 붉은색 가설 장비가 놓여 있고 우측 상단에 굴착기 1대가 보인다. 구조물 상부 가장자리에는 녹색 방호울타리가 일부 구간에 설치되어 있다.",
+  "objects": [
+    {
+      "id": "water_1",
+      "label": "수역",
+      "attributes": {
+        "state": []
+      },
+      "location": "화면 좌측과 중앙 하부"
+    },
+    {
+      "id": "structure_1",
+      "label": "콘크리트구조물",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 중앙에서 우측 하부로 길게 이어진 부분"
+    },
+    {
+      "id": "barrier_1",
+      "label": "방호울타리",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 우측 상부 콘크리트구조물 가장자리"
+    },
+    {
+      "id": "excavator_1",
+      "label": "굴착기",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 우측 상단 콘크리트구조물 위"
+    },
+    {
+      "id": "material_1",
+      "label": "자재",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 중앙 상부 콘크리트구조물 위의 붉은색 트러스형 장비"
+    }
+  ],
+  "relationships": [
+    {
+      "subject_id": "barrier_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "structure_1"
+    },
+    {
+      "subject_id": "excavator_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "structure_1"
+    },
+    {
+      "subject_id": "material_1",
+      "Functional": "",
+      "Structural": "on",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "structure_1"
+    },
+    {
+      "subject_id": "structure_1",
+      "Functional": "",
+      "Structural": "",
+      "Spatial": "along",
+      "Safety-critical": "",
+      "object_id": "water_1"
+    },
+    {
+      "subject_id": "excavator_1",
+      "Functional": "",
+      "Structural": "",
+      "Spatial": "next_to",
+      "Safety-critical": "",
+      "object_id": "barrier_1"
+    }
+  ],
+  "hazards": []
+}

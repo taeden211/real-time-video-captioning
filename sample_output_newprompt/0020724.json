@@ -1,0 +1,193 @@
+{
+  "scene_description": "깊은 굴착부 내부가 보이며 흙막이 벽과 강재 버팀대가 설치되어 있다. 좌측 상단 가장자리와 우측 중단 경사 작업면에 근로자 2명이 각각 서서 작업 중이다. 굴착부 바닥과 하단 가장자리에는 고인 물이 보이고, 우측에는 파란색 배관이 아래로 내려와 있다.",
+  "objects": [
+    {
+      "id": "worker_1",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 좌측 상단 굴착 가장자리"
+    },
+    {
+      "id": "worker_2",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "서 있음",
+          "작업 중"
+        ]
+      },
+      "location": "화면 우측 중단 경사 작업발판 위"
+    },
+    {
+      "id": "pipe_1",
+      "label": "파이프",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 상단 중앙에서 우측으로 가로지르는 강재 버팀대"
+    },
+    {
+      "id": "pipe_2",
+      "label": "파이프",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 하단 중앙에서 우측으로 가로지르는 강재 버팀대"
+    },
+    {
+      "id": "platform_1",
+      "label": "작업발판",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 우측 중단에서 상단으로 비스듬히 놓인 좁은 발판"
+    },
+    {
+      "id": "water_1",
+      "label": "수역",
+      "attributes": {
+        "state": [
+          "채워짐"
+        ]
+      },
+      "location": "화면 중앙 하단 굴착 바닥의 고인 물"
+    },
+    {
+      "id": "water_2",
+      "label": "수역",
+      "attributes": {
+        "state": [
+          "채워짐"
+        ]
+      },
+      "location": "화면 하단 가장자리 앞쪽의 고인 물"
+    },
+    {
+      "id": "gas_pipe_1",
+      "label": "가스배관",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 우측 상단에서 중앙 하단으로 내려오는 파란색 배관"
+    },
+    {
+      "id": "temp_support_1",
+      "label": "임시지보",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 하단 전면에 연속으로 세워진 강재 흙막이 부재"
+    }
+  ],
+  "relationships": [
+    {
+      "subject_id": "worker_2",
+      "Functional": "working_on",
+      "Structural": "",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "platform_1"
+    },
+    {
+      "subject_id": "worker_2",
+      "Functional": "",
+      "Structural": "",
+      "Spatial": "next_to",
+      "Safety-critical": "",
+      "object_id": "pipe_1"
+    },
+    {
+      "subject_id": "worker_2",
+      "Functional": "",
+      "Structural": "",
+      "Spatial": "next_to",
+      "Safety-critical": "",
+      "object_id": "gas_pipe_1"
+    },
+    {
+      "subject_id": "worker_1",
+      "Functional": "",
+      "Structural": "",
+      "Spatial": "above",
+      "Safety-critical": "",
+      "object_id": "pipe_1"
+    },
+    {
+      "subject_id": "pipe_1",
+      "Functional": "",
+      "Structural": "attached_to",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "temp_support_1"
+    },
+    {
+      "subject_id": "pipe_2",
+      "Functional": "",
+      "Structural": "attached_to",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "temp_support_1"
+    },
+    {
+      "subject_id": "gas_pipe_1",
+      "Functional": "",
+      "Structural": "along",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "platform_1"
+    },
+    {
+      "subject_id": "water_1",
+      "Functional": "",
+      "Structural": "inside",
+      "Spatial": "",
+      "Safety-critical": "",
+      "object_id": "temp_support_1"
+    }
+  ],
+  "hazards": [
+    {
+      "related_object_ids": [
+        "worker_1"
+      ],
+      "hazard": "추락",
+      "reason": "근로자가 굴착부 가장자리에서 작업하고 있으며 난간이 보이지 않는다."
+    },
+    {
+      "related_object_ids": [
+        "worker_2",
+        "platform_1"
+      ],
+      "hazard": "추락",
+      "reason": "근로자가 좁고 경사진 작업발판 위에서 작업하고 있으며 측면 난간이 보이지 않는다."
+    },
+    {
+      "related_object_ids": [
+        "worker_2",
+        "water_1"
+      ],
+      "hazard": "익수",
+      "reason": "근로자 아래 굴착 바닥에 고인 물이 있다."
+    }
+  ]
+}

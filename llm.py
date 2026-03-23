@@ -149,7 +149,9 @@ Relation tiers (prefer higher tiers — use the most specific relation that appl
 - Tier 3 — Spatial (directional): next_to, above, below, under, behind, in_front_of, along
 - Safety-critical: too_close_to, approaching, blocking
 
-If a Tier 1 relation exists between a pair, do not add a redundant Tier 3 relation for the same pair.
+For each object pair, fill in the appropriate relation per tier within a single relationship entry. 
+If no relation exists for a tier, use "". 
+Do not duplicate semantically equivalent relations across tiers (e.g., "on" in Structural and "above" in Spatial for the same pair — pick one tier only).
 
 Do not duplicate semantically redundant relations between the same pair.
 Do not invent relationships not visible in the image.
@@ -199,9 +201,12 @@ JSON SCHEMA
   ],
   "relationships": [
     {
-      "subject_id": "string",
-      "relation": "string",
-      "object_id": "string"
+        "subject_id": "string",
+        "Functional": "string",
+        "Structural": "string",
+        "Spatial": "string",
+        "Safety-critical": "string",
+        "object_id": "string"
     }
   ],
   "hazards": [
@@ -361,16 +366,7 @@ VALID_RELATIONS = {
 
 FORBIDDEN_RELATIONS = {"near", "at_risk_of"}
 
-VALID_HAZARDS = {
-    "추락",
-    "낙하물",
-    "충돌",
-    "협착",
-    "전도",
-    "감전",
-    "익수",
-    "안전관리 필요",
-}
+VALID_HAZARDS = {"추락", "낙하물", "충돌", "협착", "전도", "감전", "익수"}
 
 REQUIRED_KEYS = {"scene_description", "objects", "relationships", "hazards"}
 
@@ -446,6 +442,8 @@ def validate_json(text: str) -> dict:
 
     # ── Pass 2: Remove relationships referencing removed objects ──
     clean_rels = []
+    TIER_KEYS = ["Functional", "Structural", "Spatial", "Safety-critical"]
+
     for rel in data.get("relationships", []):
         sid, oid = rel.get("subject_id"), rel.get("object_id")
         if sid in removed_ids or oid in removed_ids:
@@ -453,11 +451,16 @@ def validate_json(text: str) -> dict:
                 f"Removed relationship {sid}→{oid} (references removed object)"
             )
             continue
-        r = rel.get("relation")
-        if r in FORBIDDEN_RELATIONS:
-            warnings.append(f"Forbidden relation '{r}' between {sid}→{oid}")
-        elif r not in VALID_RELATIONS:
-            warnings.append(f"Invalid relation '{r}'")
+        for tier in TIER_KEYS:
+            r = rel.get(tier, "")
+            if not r:
+                continue
+            if r in FORBIDDEN_RELATIONS:
+                warnings.append(
+                    f"Forbidden relation '{r}' in {tier} between {sid}→{oid}"
+                )
+            elif r not in VALID_RELATIONS:
+                warnings.append(f"Invalid relation '{r}' in {tier}")
         if sid not in valid_ids:
             warnings.append(f"Unknown subject_id '{sid}'")
         if oid not in valid_ids:
@@ -576,8 +579,6 @@ def main() -> None:
             for lbl in novel:
                 all_novel_labels[lbl] = all_novel_labels.get(lbl, 0) + 1
 
-            out_name = os.path.splitext(name)[0] + ".json"
-            out_path = os.path.join(OUTPUT_DIR, out_name)
             with open(out_path, "w", encoding="utf-8") as f:
                 json.dump(result, f, ensure_ascii=False, indent=2)
 
