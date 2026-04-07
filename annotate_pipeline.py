@@ -36,8 +36,12 @@ Scene description rules:
 OBJECT RULES
 ─────────────────────────────────────────────
 
-Include all clearly visible construction-safety-relevant objects as separate entries.
-Do not collapse multiple objects of the same type into one unless they are truly indistinguishable.
+Grouping rules:
+- When 3 or more objects share the SAME label AND occupy the SAME spatial zone AND have similar states, merge them into ONE group entry with a "count" field.
+- Group id uses the standard prefix + "group_" + number (e.g., "worker_group_1", "opening_group_1").
+- "location" describes the zone the group occupies (e.g., "슬래브 가장자리 일대", "비계 상부 전반").
+- Objects that are individually distinguishable by unique actions, unique PPE status, or unique relationships to other objects MUST remain as separate entries even if label matches.
+- If count is 1, omit the "count" field entirely (default single object).
 
 Anti-hallucination rules (CRITICAL):
 - NEVER create an object you cannot see in the image.
@@ -78,6 +82,7 @@ Id prefixes:
   철근→rebar_  합판→plywood_  파이프→pipe_  H빔→hbeam_  토사→soil_
   자재→material_  개구부→opening_  난간→guardrail_  사다리→ladder_
   수역→water_  안전모→helmet_  안전대→belt_  가스배관→gas_pipe_
+  For group entries, insert "group_" after the prefix (e.g., worker_group_1).
   For unlisted labels, create a reasonable English snake_case prefix.
 
 Number instances left-to-right when possible.
@@ -105,7 +110,7 @@ PPE handling:
 ATTRIBUTE RULES
 ─────────────────────────────────────────────
 
-Worker objects: 
+Worker objects:
   "attributes": {"ppe": [...], "state": [...]}
 
 Non-worker objects: "attributes": {"state": [...]}
@@ -117,48 +122,39 @@ Non-worker objects: "attributes": {"state": [...]}
              "설치됨", "해체됨", "손상됨", "노출됨", "미설치", "채워짐", "비어 있음"]
 
 ─────────────────────────────────────────────
-RELATIONSHIP RULES (CRITICAL FOR SCENE GRAPH QUALITY)
+RELATIONSHIP RULES
 ─────────────────────────────────────────────
 
 "relationships" must be an array. If none are clearly visible, use [].
 
-Goal: capture ALL visually evident pairwise spatial, functional, and safety-critical relationships.
+Goal: capture ALL visually evident pairwise relationships using a flat per-edge schema.
 
-Relationship extraction strategy — check these in order:
-1. Worker ↔ Equipment: Is a worker operating, approaching, or dangerously close to equipment?
-2. Worker ↔ Structure/Edge: Is a worker on, at the edge of a structure, opening, or water?
-3. Equipment ↔ Equipment: Are two machines collaborating (e.g., excavator loading dump truck)?
-4. Equipment ↔ Structure: Is equipment on, attached to, or working on a structure?
-5. Object ↔ Hazard zone: Is any object at an opening, edge, water, or unprotected area?
-6. Spatial: General positioning with clear directionality — on, next_to, above, behind, etc.
+Each relationship is one edge: {sub_id, predicate, obj_id, category, score, evidence}.
 
-FORBIDDEN relations — do NOT use:
-- "near" — too vague, no directionality. Use "next_to", "too_close_to", or a functional relation instead.
-- "at_risk_of" — hazard assessment belongs in the "hazards" field, not in relationships.
+Category → allowed predicates (closed sets, use EXACTLY one):
+  functional  : operating, loading, carrying, working_on, walking_on
+  structural  : on, inside, attached_to, supported_by, connected_to
+  spatial     : next_to, above, below, behind, in_front_of
+  safety      : too_close_to, approaching, blocking
 
-Allowed relations (use exactly):
-["on", "under", "above", "below", "next_to", "inside",
- "attached_to", "behind", "in_front_of",
- "walking_on", "working_on", "carrying", "operating",
- "approaching", "blocking", "too_close_to",
- "loading", "supported_by", "connected_to", "along"]
-
-Relation tiers (prefer higher tiers — use the most specific relation that applies):
-- Tier 1 — Functional: operating, loading, carrying, working_on, walking_on
-- Tier 2 — Structural: on, attached_to, supported_by, connected_to, inside
-- Tier 3 — Spatial (directional): next_to, above, below, under, behind, in_front_of, along
-- Safety-critical: too_close_to, approaching, blocking
-
-For each object pair, fill in the appropriate relation per tier within a single relationship entry. 
-If no relation exists for a tier, use "". 
-Do not duplicate semantically equivalent relations across tiers (e.g., "on" in Structural and "above" in Spatial for the same pair — pick one tier only).
-
-Do not duplicate semantically redundant relations between the same pair.
-Do not invent relationships not visible in the image.
-
-Minimum relationship guideline:
+Rules:
+- "predicate" MUST belong to the closed set of its "category". No cross-category predicates.
+- For a given (sub_id, obj_id) pair, output at most ONE relationship — choose the highest-priority category:
+    safety > functional > structural > spatial
+- "score": float 0.0–1.0 indicating visual confidence for this relation.
+- "evidence": one short factual Korean sentence describing the visual basis for the relation.
+- Do NOT use "near" or "at_risk_of" — these are FORBIDDEN.
+- Do not invent relationships not visible in the image.
 - If 2+ objects are visible, there should usually be at least 1 relationship.
 - Equipment working together (e.g., excavator + dump truck) MUST have a relationship like "loading".
+
+Relationship extraction strategy — check in order:
+1. Worker ↔ Equipment: operating, approaching, too_close_to?
+2. Worker ↔ Structure/Edge: on, walking_on, too_close_to?
+3. Equipment ↔ Equipment: loading, next_to, too_close_to?
+4. Equipment ↔ Structure: on, working_on, attached_to?
+5. Object ↔ Hazard zone: too_close_to, approaching?
+6. Remaining spatial: next_to, above, below, behind, in_front_of
 
 ─────────────────────────────────────────────
 HAZARD RULES
@@ -171,7 +167,11 @@ Allowed hazard labels:
 ["추락", "낙하물", "충돌", "협착", "전도", "감전", "익수"]
 
 Hazard detection checklist — evaluate each:
-- 추락: worker at height, near unprotected edge, on structure without guardrail
+- 추락: BOTH conditions must be visually confirmed simultaneously:
+    (1) A worker is visibly at an elevated position (비계, 슬래브 가장자리, 구조물 상부 등).
+    (2) The absence of guardrail/safety net at that specific location is CLEARLY VISIBLE in the image.
+    If the edge area is cropped, occluded, too distant, or ambiguous — do NOT generate a 추락 hazard.
+    "가드레일이 보이지 않는다" ≠ "가드레일이 없다". Only confirm absence when the area is fully visible and clearly unprotected.
 - 낙하물: suspended load, material on elevated surface, overhead work
 - 충돌: worker next to operating/moving equipment, equipment next to each other
 - 협착: worker between machine and fixed object, pinch points
@@ -192,21 +192,22 @@ JSON SCHEMA
     {
       "id": "string",
       "label": "string",
+      "count": int,           // optional, only when ≥ 2 (grouped objects)
       "attributes": {
-        "ppe": ["string"], // workers only
+        "ppe": ["string"],    // workers only
         "state": ["string"]
       },
-      "location": "string (must describe a visible position in the image)"
+      "location": "string"
     }
   ],
   "relationships": [
     {
-        "subject_id": "string",
-        "Functional": "string",
-        "Structural": "string",
-        "Spatial": "string",
-        "Safety-critical": "string",
-        "object_id": "string"
+      "sub_id": "string",
+      "predicate": "string",
+      "obj_id": "string",
+      "category": "string",
+      "score": float,
+      "evidence": "string"
     }
   ],
   "hazards": [
@@ -221,10 +222,10 @@ JSON SCHEMA
 USER_PROMPT = """Analyze the provided construction-site image and generate exactly one JSON object following the schema and rules in your system instructions.
 
 Step-by-step:
-1. Scan the entire image and list all safety-relevant objects you can actually SEE. Do not add objects that are not visible.
-2. Identify each piece of heavy equipment by its defining visual features (boom-arm-bucket = 굴착기, fork prongs = 지게차, wire-hook boom = 타워크레인/이동식크레인, tiltable bed = 덤프트럭, cylindrical drum = 로드롤러, rotating drum on truck = 레미콘, folding pump boom = 콘크리트펌프카, front blade = 불도저, front bucket on wheels = 로더, tall vertical leads = 항타기, elevated platform = 고소작업차).
-3. For every pair of nearby objects, determine if a spatial, functional, or safety-critical relationship exists. Do NOT use "near" — always choose a specific directional or functional relation. Prefer Tier 1 (functional) over Tier 3 (spatial).
-4. Check the hazard checklist against every object and relationship.
+1. Scan the entire image. List all safety-relevant objects you can actually SEE. Group 3+ identical objects in the same zone into one group entry with "count". Keep individually distinguishable objects separate.
+2. Identify heavy equipment by defining visual features (boom-arm-bucket = 굴착기, fork prongs = 지게차, wire-hook boom = 타워크레인/이동식크레인, tiltable bed = 덤프트럭, cylindrical drum = 로드롤러, rotating drum on truck = 레미콘, folding pump boom = 콘크리트펌프카, front blade = 불도저, front bucket on wheels = 로더, tall vertical leads = 항타기, elevated platform = 고소작업차).
+3. For every pair of nearby objects, determine the single best relationship. Pick the highest-priority category (safety > functional > structural > spatial). Assign a confidence score and one-sentence Korean evidence.
+4. Check the hazard checklist. For 추락: confirm BOTH (a) worker at height AND (b) clearly visible absence of guardrail at that exact location.
 5. Output valid JSON only."""
 
 # ── Config ───────────────────────────────────────────────
@@ -239,7 +240,6 @@ RETRY_DELAY = 5
 # ── Ontology ─────────────────────────────────────────────
 
 PREFERRED_LABELS = {
-    # 중장비
     "굴착기",
     "타워크레인",
     "이동식크레인",
@@ -255,38 +255,32 @@ PREFERRED_LABELS = {
     "로더",
     "그레이더",
     "페이버",
-    # 차량
     "소형트럭",
     "승용차",
     "살수차",
-    # 구조물
     "콘크리트구조물",
     "교각",
     "거더",
     "옹벽",
     "슬래브",
     "기초",
-    # 가시설
     "비계",
     "동바리",
     "거푸집",
     "작업발판",
     "가설울타리",
     "임시지보",
-    # 안전시설
     "난간",
     "안전네트",
     "경고표지판",
     "방호울타리",
     "신호등",
-    # 자재
     "철근",
     "합판",
     "파이프",
     "H빔",
     "토사",
     "자재",
-    # 기타
     "근로자",
     "사다리",
     "개구부",
@@ -297,28 +291,23 @@ PREFERRED_LABELS = {
 }
 
 SYNONYM_MAP = {
-    # 굴착기 동의어
     "백호": "굴착기",
     "포클레인": "굴착기",
     "유압셔블": "굴착기",
     "엑스카베이터": "굴착기",
     "파워셔블": "굴착기",
-    # 크레인 동의어
     "크레인": "이동식크레인",
     "카고크레인": "이동식크레인",
     "기중기": "이동식크레인",
-    # 롤러 동의어
     "롤러": "로드롤러",
     "다짐롤러": "로드롤러",
     "진동롤러": "로드롤러",
     "머캐덤롤러": "로드롤러",
     "탠덤롤러": "로드롤러",
     "타이어롤러": "로드롤러",
-    # 레미콘 동의어
     "콘크리트믹서트럭": "레미콘",
     "믹서트럭": "레미콘",
     "콘크리트믹서": "레미콘",
-    # 기타 동의어
     "봉고차": "소형트럭",
     "화물차": "소형트럭",
     "휠로더": "로더",
@@ -341,28 +330,16 @@ SYNONYM_MAP = {
 
 FORBIDDEN_LABELS = {"장비", "차량", "기계", "구조물", "시설", "물체", "물건", "중장비"}
 
-VALID_RELATIONS = {
-    "on",
-    "under",
-    "above",
-    "below",
-    "next_to",
-    "inside",
-    "attached_to",
-    "behind",
-    "in_front_of",
-    "walking_on",
-    "working_on",
-    "carrying",
-    "operating",
-    "approaching",
-    "blocking",
-    "too_close_to",
-    "loading",
-    "supported_by",
-    "connected_to",
-    "along",
+CATEGORY_PREDICATES = {
+    "functional": {"operating", "loading", "carrying", "working_on", "walking_on"},
+    "structural": {"on", "inside", "attached_to", "supported_by", "connected_to"},
+    "spatial": {"next_to", "above", "below", "behind", "in_front_of"},
+    "safety": {"too_close_to", "approaching", "blocking"},
 }
+
+ALL_VALID_PREDICATES = set()
+for s in CATEGORY_PREDICATES.values():
+    ALL_VALID_PREDICATES |= s
 
 FORBIDDEN_RELATIONS = {"near", "at_risk_of"}
 
@@ -383,7 +360,7 @@ def image_to_data_uri(path: str) -> str:
     return f"data:{mime};base64,{b64}"
 
 
-def validate_json(text: str) -> dict:
+def validate_json(text: str) -> tuple:
     data = json.loads(text)
     missing = REQUIRED_KEYS - set(data.keys())
     if missing:
@@ -411,7 +388,6 @@ def validate_json(text: str) -> dict:
             )
             continue
 
-        # Synonym normalization
         original_label = obj["label"]
         obj["label"] = SYNONYM_MAP.get(obj["label"], obj["label"])
         if original_label != obj["label"]:
@@ -419,13 +395,11 @@ def validate_json(text: str) -> dict:
                 f"Normalized label '{original_label}' → '{obj['label']}' on {obj['id']}"
             )
 
-        # Forbidden generic labels
         if obj["label"] in FORBIDDEN_LABELS:
             warnings.append(
                 f"FORBIDDEN generic label '{obj['label']}' on {obj['id']} — needs manual review"
             )
 
-        # Novel label detection
         if (
             obj["label"] not in PREFERRED_LABELS
             and obj["label"] not in FORBIDDEN_LABELS
@@ -435,41 +409,76 @@ def validate_json(text: str) -> dict:
                 f"Novel label '{obj['label']}' on {obj['id']} — not in preferred vocabulary"
             )
 
+        # Validate count field
+        count = obj.get("count")
+        if count is not None:
+            if not isinstance(count, int) or count < 2:
+                warnings.append(
+                    f"Invalid count={count} on {obj['id']} — removed count field"
+                )
+                obj.pop("count", None)
+
         valid_ids.add(obj["id"])
         clean_objects.append(obj)
 
     data["objects"] = clean_objects
 
-    # ── Pass 2: Remove relationships referencing removed objects ──
+    # ── Pass 2: Validate relationships (new flat schema) ──
     clean_rels = []
-    TIER_KEYS = ["Functional", "Structural", "Spatial", "Safety-critical"]
+    seen_pairs = set()
 
     for rel in data.get("relationships", []):
-        sid, oid = rel.get("subject_id"), rel.get("object_id")
+        sid = rel.get("sub_id", "")
+        oid = rel.get("obj_id", "")
+        pred = rel.get("predicate", "")
+        cat = rel.get("category", "")
+        score = rel.get("score", 0.0)
+
         if sid in removed_ids or oid in removed_ids:
             warnings.append(
                 f"Removed relationship {sid}→{oid} (references removed object)"
             )
             continue
-        for tier in TIER_KEYS:
-            r = rel.get(tier, "")
-            if not r:
-                continue
-            if r in FORBIDDEN_RELATIONS:
-                warnings.append(
-                    f"Forbidden relation '{r}' in {tier} between {sid}→{oid}"
-                )
-            elif r not in VALID_RELATIONS:
-                warnings.append(f"Invalid relation '{r}' in {tier}")
+
         if sid not in valid_ids:
-            warnings.append(f"Unknown subject_id '{sid}'")
+            warnings.append(f"Unknown sub_id '{sid}'")
         if oid not in valid_ids:
-            warnings.append(f"Unknown object_id '{oid}'")
+            warnings.append(f"Unknown obj_id '{oid}'")
+
+        if pred in FORBIDDEN_RELATIONS:
+            warnings.append(
+                f"Forbidden predicate '{pred}' between {sid}→{oid} — skipped"
+            )
+            continue
+
+        if pred not in ALL_VALID_PREDICATES:
+            warnings.append(f"Invalid predicate '{pred}' between {sid}→{oid}")
+
+        if cat not in CATEGORY_PREDICATES:
+            warnings.append(f"Invalid category '{cat}' between {sid}→{oid}")
+        elif pred not in CATEGORY_PREDICATES.get(cat, set()):
+            warnings.append(
+                f"Predicate '{pred}' does not belong to category '{cat}' between {sid}→{oid}"
+            )
+
+        if not isinstance(score, (int, float)) or not (0.0 <= score <= 1.0):
+            warnings.append(f"Invalid score={score} between {sid}→{oid}, clamping")
+            score = max(
+                0.0, min(1.0, float(score) if isinstance(score, (int, float)) else 0.5)
+            )
+            rel["score"] = score
+
+        pair_key = (sid, oid)
+        if pair_key in seen_pairs:
+            warnings.append(f"Duplicate pair {sid}→{oid} — keeping first only")
+            continue
+        seen_pairs.add(pair_key)
+
         clean_rels.append(rel)
 
     data["relationships"] = clean_rels
 
-    # ── Pass 3: Remove hazards referencing removed objects ──
+    # ── Pass 3: Validate hazards ──
     clean_hazards = []
     for haz in data.get("hazards", []):
         ref_ids = haz.get("related_object_ids", [])
@@ -560,18 +569,19 @@ def main() -> None:
     print(f"Processing {len(images)} images with {MODEL}...\n")
 
     success, fail = 0, 0
-    all_novel_labels = {}  # label -> count
+    all_novel_labels = {}
 
     for i, img_path in enumerate(images, 1):
         name = os.path.basename(img_path)
         out_name = os.path.splitext(name)[0] + ".json"
         out_path = os.path.join(OUTPUT_DIR, out_name)
 
-        # 이미 파일이 존재하면 건너뛰는 코드 추가
         if os.path.exists(out_path):
             print(f"[{i}/{len(images)}] {name} ... 이미 존재함 (건너뜀)")
             success += 1
             continue
+
+        print(f"[{i}/{len(images)}] {name} ... ", end="", flush=True)
         try:
             data_uri = image_to_data_uri(img_path)
             result, novel = call_api(client, data_uri)
@@ -583,16 +593,18 @@ def main() -> None:
                 json.dump(result, f, ensure_ascii=False, indent=2)
 
             obj_count = len(result["objects"])
+            grp_count = sum(1 for o in result["objects"] if o.get("count", 0) >= 2)
             rel_count = len(result["relationships"])
             haz_count = len(result["hazards"])
-            print(f"✓  objects={obj_count} rels={rel_count} hazards={haz_count}")
+            print(
+                f"✓  objects={obj_count} (groups={grp_count}) rels={rel_count} hazards={haz_count}"
+            )
             success += 1
 
         except Exception as e:
             print(f"✗  {e}", file=sys.stderr)
             fail += 1
 
-    # ── Novel label report ──
     if all_novel_labels:
         print("\n── Novel labels (not in preferred vocabulary) ──")
         for lbl, cnt in sorted(all_novel_labels.items(), key=lambda x: -x[1]):
