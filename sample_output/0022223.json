@@ -1,0 +1,111 @@
+{
+  "scene_description": "콘크리트 슬래브 위에서 철근 배근과 자재 적치가 진행 중인 현장이다. 화면 우측 가장자리에는 노란 난간이 연속 설치되어 있다. 화면 상단 좌측 부근에 근로자 1명이 슬래브 위에서 작업 중이다.",
+  "objects": [
+    {
+      "id": "slab_1",
+      "label": "슬래브",
+      "attributes": {
+        "state": []
+      },
+      "location": "화면 전반 바닥"
+    },
+    {
+      "id": "worker_1",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 상단 좌측"
+    },
+    {
+      "id": "rebar_group_1",
+      "label": "철근",
+      "count": 6,
+      "attributes": {
+        "state": [
+          "노출됨"
+        ]
+      },
+      "location": "화면 전반 슬래브 위"
+    },
+    {
+      "id": "guardrail_1",
+      "label": "난간",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 우측 가장자리"
+    },
+    {
+      "id": "barrier_1",
+      "label": "방호울타리",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 상단 중앙"
+    },
+    {
+      "id": "material_group_1",
+      "label": "자재",
+      "count": 4,
+      "attributes": {
+        "state": [
+          "적재 중"
+        ]
+      },
+      "location": "화면 중앙 및 상단 중앙"
+    }
+  ],
+  "relationships": [
+    {
+      "sub_id": "worker_1",
+      "predicate": "working_on",
+      "obj_id": "slab_1",
+      "category": "functional",
+      "score": 0.95,
+      "evidence": "근로자가 슬래브 바닥 위에 서서 작업하는 모습이 보인다."
+    },
+    {
+      "sub_id": "worker_1",
+      "predicate": "next_to",
+      "obj_id": "rebar_group_1",
+      "category": "spatial",
+      "score": 0.92,
+      "evidence": "근로자 주변에 수직 및 수평 철근이 가까이 배치되어 있다."
+    },
+    {
+      "sub_id": "guardrail_1",
+      "predicate": "on",
+      "obj_id": "slab_1",
+      "category": "structural",
+      "score": 0.96,
+      "evidence": "노란 난간이 슬래브 우측 가장자리를 따라 설치되어 있다."
+    },
+    {
+      "sub_id": "barrier_1",
+      "predicate": "on",
+      "obj_id": "slab_1",
+      "category": "structural",
+      "score": 0.88,
+      "evidence": "상단 중앙의 녹색 방호울타리가 슬래브 위 개구부 주변에 설치되어 있다."
+    },
+    {
+      "sub_id": "material_group_1",
+      "predicate": "on",
+      "obj_id": "slab_1",
+      "category": "structural",
+      "score": 0.94,
+      "evidence": "묶인 자재 더미들이 슬래브 바닥 위에 적치되어 있다."
+    }
+  ],
+  "hazards": []
+}

@@ -1,0 +1,167 @@
+{
+  "scene_description": "콘크리트 바닥 위에 비계와 작업발판이 설치되어 있다. 우측 상부에는 철근 조립체가 세워져 있고 근로자 1명이 그 위의 좁은 발판에서 작업 중이다. 우측 중앙 작업발판 위에는 근로자 2명이 서 있다. 좌측에는 타워크레인 마스트가 보이고 좌측 하단 통로 부근에 근로자 1명이 있다.",
+  "objects": [
+    {
+      "id": "tower_crane_1",
+      "label": "타워크레인",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 좌측 중앙"
+    },
+    {
+      "id": "rebar_1",
+      "label": "철근",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 우측 상부"
+    },
+    {
+      "id": "scaffold_1",
+      "label": "비계",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 중앙에서 우측 중앙"
+    },
+    {
+      "id": "platform_1",
+      "label": "작업발판",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 우측 중앙 비계 상부"
+    },
+    {
+      "id": "worker_1",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "서 있음",
+          "작업 중"
+        ]
+      },
+      "location": "화면 우측 상부 철근 앞 좁은 발판 위"
+    },
+    {
+      "id": "worker_2",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 우측 중앙 작업발판 위 좌측"
+    },
+    {
+      "id": "worker_3",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 우측 중앙 작업발판 위 우측"
+    },
+    {
+      "id": "worker_4",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 좌측 하단 통로 부근"
+    },
+    {
+      "id": "guardrail_1",
+      "label": "난간",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 좌측 하단 가장자리 통로"
+    }
+  ],
+  "relationships": [
+    {
+      "sub_id": "worker_1",
+      "predicate": "working_on",
+      "obj_id": "rebar_1",
+      "category": "functional",
+      "score": 0.95,
+      "evidence": "근로자 1명이 철근 조립체 측면의 좁은 발판 위에서 철근 바로 앞에 위치해 작업하는 모습이다."
+    },
+    {
+      "sub_id": "worker_1",
+      "predicate": "on",
+      "obj_id": "platform_1",
+      "category": "structural",
+      "score": 0.72,
+      "evidence": "근로자 1명은 철근 앞에 놓인 좁은 작업발판 위에 서 있다."
+    },
+    {
+      "sub_id": "worker_2",
+      "predicate": "on",
+      "obj_id": "platform_1",
+      "category": "structural",
+      "score": 0.98,
+      "evidence": "근로자 2명 중 좌측 인원은 비계 상부 작업발판 위에 서 있다."
+    },
+    {
+      "sub_id": "worker_3",
+      "predicate": "on",
+      "obj_id": "platform_1",
+      "category": "structural",
+      "score": 0.98,
+      "evidence": "근로자 3명 중 우측 인원은 비계 상부 작업발판 위에 서 있다."
+    },
+    {
+      "sub_id": "platform_1",
+      "predicate": "supported_by",
+      "obj_id": "scaffold_1",
+      "category": "structural",
+      "score": 0.97,
+      "evidence": "작업발판이 하부의 청색 비계 프레임 위에 설치되어 있다."
+    },
+    {
+      "sub_id": "worker_4",
+      "predicate": "next_to",
+      "obj_id": "guardrail_1",
+      "category": "spatial",
+      "score": 0.9,
+      "evidence": "좌측 하단 근로자는 가장자리 통로의 적색 난간 바로 옆에 있다."
+    },
+    {
+      "sub_id": "tower_crane_1",
+      "predicate": "next_to",
+      "obj_id": "scaffold_1",
+      "category": "spatial",
+      "score": 0.82,
+      "evidence": "타워크레인 마스트가 비계 구조물의 좌측에 인접해 서 있다."
+    }
+  ],
+  "hazards": []
+}

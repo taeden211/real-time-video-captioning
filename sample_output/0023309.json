@@ -1,0 +1,118 @@
+{
+  "scene_description": "좌측에 다층 비계와 작업발판이 설치된 콘크리트구조물이 보인다. 상부 작업발판 위에 근로자 1명이 서 있다. 중앙에는 가설울타리와 자재가 놓여 있고, 우측 하단에는 소형 콘크리트 믹서로 보이는 장비가 있다.",
+  "objects": [
+    {
+      "id": "structure_1",
+      "label": "콘크리트구조물",
+      "attributes": {
+        "state": []
+      },
+      "location": "화면 좌측 전반"
+    },
+    {
+      "id": "scaffold_1",
+      "label": "비계",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 좌측 전반"
+    },
+    {
+      "id": "platform_1",
+      "label": "작업발판",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 좌측 상단 비계 내부"
+    },
+    {
+      "id": "worker_1",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [],
+        "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 좌측 상단 작업발판 위"
+    },
+    {
+      "id": "temp_fence_1",
+      "label": "가설울타리",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 중앙 세로 방향"
+    },
+    {
+      "id": "material_group_1",
+      "label": "자재",
+      "count": 3,
+      "attributes": {
+        "state": [
+          "적치됨"
+        ]
+      },
+      "location": "화면 중앙 하단 가설울타리 옆"
+    },
+    {
+      "id": "mixer_1",
+      "label": "레미콘",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 우측 하단"
+    }
+  ],
+  "relationships": [
+    {
+      "sub_id": "scaffold_1",
+      "predicate": "attached_to",
+      "obj_id": "structure_1",
+      "category": "structural",
+      "score": 0.97,
+      "evidence": "비계가 좌측 콘크리트구조물 외측면을 따라 밀착 설치되어 있다."
+    },
+    {
+      "sub_id": "platform_1",
+      "predicate": "on",
+      "obj_id": "scaffold_1",
+      "category": "structural",
+      "score": 0.95,
+      "evidence": "작업발판이 비계 상부 구간 내부에 놓여 있다."
+    },
+    {
+      "sub_id": "worker_1",
+      "predicate": "on",
+      "obj_id": "platform_1",
+      "category": "structural",
+      "score": 0.98,
+      "evidence": "근로자가 좌측 상단 작업발판 위에 서 있는 모습이 보인다."
+    },
+    {
+      "sub_id": "material_group_1",
+      "predicate": "next_to",
+      "obj_id": "temp_fence_1",
+      "category": "spatial",
+      "score": 0.9,
+      "evidence": "적치된 자재들이 중앙의 가설울타리 바로 옆에 모여 있다."
+    },
+    {
+      "sub_id": "mixer_1",
+      "predicate": "next_to",
+      "obj_id": "temp_fence_1",
+      "category": "spatial",
+      "score": 0.82,
+      "evidence": "우측 하단 장비가 중앙 가설울타리 오른쪽 가까이에 위치한다."
+    }
+  ],
+  "hazards": []
+}
