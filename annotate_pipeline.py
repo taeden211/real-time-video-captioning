@@ -337,7 +337,10 @@ def validate_json(text: str) -> tuple:
     if missing:
         raise ValueError(f"Missing keys: {missing}")
 
-    if not isinstance(data["scene_description"], str) or not data["scene_description"].strip():
+    if (
+        not isinstance(data["scene_description"], str)
+        or not data["scene_description"].strip()
+    ):
         raise ValueError("scene_description must be a non-empty string")
 
     if not isinstance(data["objects"], list):
@@ -641,4 +644,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

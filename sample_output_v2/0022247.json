@@ -1,0 +1,113 @@
+{
+  "scene_description": "비포장 도로 옆 야외 작업 구역에 로더 1대와 근로자 2명이 보인다. 도로 위에는 묶인 블록 자재 여러 묶음과 검은색 자재 더미가 놓여 있다. 좌측 뒤에는 수역이 있고 우측에는 난간이 설치된 길이 보인다.",
+  "objects": [
+    {
+      "id": "worker_1",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 중앙 좌측 도로 가장자리"
+    },
+    {
+      "id": "worker_2",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [],
+        "state": [
+          "앉아 있음"
+        ]
+      },
+      "location": "화면 중앙 좌측 검은색 자재 옆"
+    },
+    {
+      "id": "loader_1",
+      "label": "로더",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "화면 우측 중앙 도로 위"
+    },
+    {
+      "id": "material_group_1",
+      "label": "기타자재",
+      "count": 3,
+      "attributes": {
+        "state": [
+          "적재됨"
+        ]
+      },
+      "location": "화면 우측 하단 도로 위"
+    },
+    {
+      "id": "material_group_2",
+      "label": "기타자재",
+      "attributes": {
+        "state": [
+          "쌓여 있음"
+        ]
+      },
+      "location": "화면 중앙 하단"
+    },
+    {
+      "id": "guardrail_group_1",
+      "label": "난간",
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 우측 뒤 길 가장자리"
+    },
+    {
+      "id": "water_1",
+      "label": "수역",
+      "attributes": {
+        "state": []
+      },
+      "location": "화면 좌측 뒤"
+    }
+  ],
+  "relationships": [
+    {
+      "sub_id": "worker_1",
+      "predicate": "next_to",
+      "obj_id": "worker_2",
+      "category": "spatial",
+      "score": 0.95,
+      "evidence": "두 근로자가 화면 중앙 좌측의 같은 작업 지점에 바로 붙어 있다."
+    },
+    {
+      "sub_id": "worker_1",
+      "predicate": "next_to",
+      "obj_id": "material_group_2",
+      "category": "spatial",
+      "score": 0.88,
+      "evidence": "서 있는 근로자 바로 옆에 검은색 자재 더미가 놓여 있다."
+    },
+    {
+      "sub_id": "loader_1",
+      "predicate": "behind",
+      "obj_id": "material_group_1",
+      "category": "spatial",
+      "score": 0.94,
+      "evidence": "로더가 화면 우측의 묶인 자재 더미 뒤쪽에 위치한다."
+    },
+    {
+      "sub_id": "worker_1",
+      "predicate": "in_front_of",
+      "obj_id": "loader_1",
+      "category": "spatial",
+      "score": 0.83,
+      "evidence": "근로자가 로더보다 화면 앞쪽 왼편에 서 있다."
+    }
+  ],
+  "hazards": []
+}
