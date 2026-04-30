@@ -1,16 +1,6 @@
 {
-  "scene_description": "비포장 작업로 옆에 로더 1대가 정지해 있고 운전석에 사람이 보인다. 작업로 중앙에는 근로자 1명이 서 있으며, 우측에는 묶인 자재 더미가 놓여 있다. 좌측 뒤편에는 수역이 보이고 전경에는 굴착된 토사와 잔해가 있다.",
+  "scene_description": "야외 토공 작업 구역의 흙길 위에 로더 1대가 정지해 있다. 로더 앞쪽과 우측에 묶음 형태의 자재가 여러 개 적치되어 있고, 중앙에는 근로자 1명이 자재 근처에 서 있다. 좌측 뒤로 수역이 보이며 우측에는 난간이 설치된 길이 있다.",
   "objects": [
-    {
-      "id": "loader_1",
-      "label": "로더",
-      "attributes": {
-        "state": [
-          "정지"
-        ]
-      },
-      "location": "화면 우측 중앙 작업로"
-    },
     {
       "id": "worker_1",
       "label": "근로자",
@@ -22,110 +12,85 @@
           "서 있음"
         ]
       },
-      "location": "화면 중앙 좌측 작업로"
+      "location": "화면 중앙 좌측 흙길 위"
     },
     {
-      "id": "worker_2",
-      "label": "근로자",
+      "id": "loader_1",
+      "label": "로더",
       "attributes": {
-        "ppe": [],
         "state": [
-          "앉아 있음"
+          "정지"
         ]
       },
-      "location": "화면 우측 중앙 로더 운전석"
+      "location": "화면 우측 중앙 흙길 위"
     },
     {
       "id": "material_group_1",
-      "label": "자재",
-      "count": 4,
+      "label": "기타자재",
+      "count": 3,
       "attributes": {
         "state": [
-          "적재됨"
+          "적치됨"
         ]
       },
-      "location": "화면 우측 하단 작업로"
+      "location": "화면 우측 하단 로더 앞쪽"
     },
     {
       "id": "material_group_2",
-      "label": "자재",
-      "count": 6,
+      "label": "기타자재",
       "attributes": {
         "state": [
-          "적재됨"
+          "적치됨"
         ]
       },
-      "location": "화면 중앙 하단 작업로"
+      "location": "화면 중앙 하단 근로자 앞"
     },
     {
-      "id": "soil_1",
-      "label": "토사",
+      "id": "guardrail_group_1",
+      "label": "난간",
       "attributes": {
         "state": [
-          "노출됨"
+          "설치됨"
         ]
       },
-      "location": "화면 하단 전경"
+      "location": "화면 우측 가장자리 길 옆"
     },
     {
       "id": "water_1",
       "label": "수역",
       "attributes": {
-        "state": []
+        "state": [
+          "채워짐"
+        ]
       },
-      "location": "화면 좌측 뒤편"
+      "location": "화면 좌측 중단"
     }
   ],
   "relationships": [
     {
-      "sub_id": "worker_2",
-      "predicate": "inside",
-      "obj_id": "loader_1",
-      "category": "structural",
-      "score": 0.98,
-      "evidence": "사람이 로더의 운전석 내부에 앉아 있다."
-    },
-    {
       "sub_id": "worker_1",
-      "predicate": "too_close_to",
-      "obj_id": "loader_1",
-      "category": "safety",
-      "score": 0.88,
-      "evidence": "근로자가 로더 버킷 앞쪽 가까운 위치에 서 있다."
+      "predicate": "next_to",
+      "obj_id": "material_group_2",
+      "category": "spatial",
+      "score": 0.95,
+      "evidence": "근로자가 중앙 하단의 적치된 자재 바로 옆에 서 있다."
     },
     {
       "sub_id": "loader_1",
-      "predicate": "next_to",
+      "predicate": "behind",
       "obj_id": "material_group_1",
       "category": "spatial",
-      "score": 0.93,
-      "evidence": "로더가 우측의 묶인 자재 더미 바로 옆에 위치한다."
-    },
-    {
-      "sub_id": "material_group_2",
-      "predicate": "in_front_of",
-      "obj_id": "worker_1",
-      "category": "spatial",
-      "score": 0.74,
-      "evidence": "검은색 자재 더미가 근로자 앞쪽에 놓여 있다."
+      "score": 0.92,
+      "evidence": "로더가 우측 하단의 자재 묶음 뒤쪽에 위치한다."
     },
     {
       "sub_id": "worker_1",
       "predicate": "in_front_of",
-      "obj_id": "water_1",
+      "obj_id": "loader_1",
       "category": "spatial",
-      "score": 0.72,
-      "evidence": "근로자가 뒤편 수역보다 화면 앞쪽 작업로에 서 있다."
+      "score": 0.84,
+      "evidence": "근로자가 로더보다 화면의 앞쪽에 서 있다."
     }
   ],
-  "hazards": [
-    {
-      "related_object_ids": [
-        "worker_1",
-        "loader_1"
-      ],
-      "hazard": "충돌",
-      "reason": "근로자가 로더 버킷 가까이에 있어 장비와의 충돌 위험이 있다."
-    }
-  ]
+  "hazards": []
 }

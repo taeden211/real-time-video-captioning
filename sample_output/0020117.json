@@ -1,10 +1,9 @@
 {
-  "scene_description": "콘크리트 슬래브 상부에서 근로자들이 목재 자재를 운반하거나 정리하고 있다. 화면 하단과 좌측에는 동바리와 거푸집이 설치되어 있고, 우측 상부에는 철근이 배근되어 있다. 슬래브 상부 곳곳에 목재와 패널 자재가 적치되어 있으며 상부 중앙에는 여러 개의 개구부가 보인다.",
+  "scene_description": "콘크리트 슬래브 상부에 동바리와 작업발판이 설치되어 있다. 여러 근로자가 상부 작업면에서 자재를 운반하거나 정리하고 있다. 슬래브 우측에는 철근이 넓게 배치되어 있고, 중앙과 하부에는 목재 자재와 거푸집이 적치되어 있다.",
   "objects": [
     {
-      "id": "worker_group_1",
+      "id": "worker_1",
       "label": "근로자",
-      "count": 3,
       "attributes": {
         "ppe": [
           "안전모"
@@ -13,7 +12,7 @@
           "서 있음"
         ]
       },
-      "location": "화면 상단 중앙 개구부 가장자리 일대"
+      "location": "화면 상단 중앙 좌측 슬래브 가장자리"
     },
     {
       "id": "worker_2",
@@ -23,10 +22,10 @@
           "안전모"
         ],
         "state": [
-          "허리 굽힘"
+          "서 있음"
         ]
       },
-      "location": "화면 중앙 좌측 목재 더미 위"
+      "location": "화면 상단 중앙 우측 슬래브 가장자리"
     },
     {
       "id": "worker_3",
@@ -36,10 +35,10 @@
           "안전모"
         ],
         "state": [
-          "운반 중"
+          "서 있음"
         ]
       },
-      "location": "화면 중앙 우측 목재 더미 옆"
+      "location": "화면 중앙 우측 자재 더미 옆"
     },
     {
       "id": "worker_4",
@@ -49,10 +48,23 @@
           "안전모"
         ],
         "state": [
+          "서 있음"
+        ]
+      },
+      "location": "화면 중앙 좌측 목재 더미 위"
+    },
+    {
+      "id": "worker_5",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
           "이동 중"
         ]
       },
-      "location": "화면 우측 하단 동바리 옆 통로"
+      "location": "화면 하단 우측 동바리 사이"
     },
     {
       "id": "opening_group_1",
@@ -63,118 +75,140 @@
           "노출됨"
         ]
       },
-      "location": "화면 상단 중앙 슬래브 가장자리 구간"
+      "location": "화면 상단 중앙 슬래브 내부"
     },
     {
-      "id": "prop_group_1",
-      "label": "동바리",
+      "id": "rebar_group_1",
+      "label": "철근",
       "count": 2,
       "attributes": {
         "state": [
           "설치됨"
         ]
       },
-      "location": "화면 하단 전반과 좌측 중단"
+      "location": "화면 우측 상단 슬래브 전면"
+    },
+    {
+      "id": "plywood_group_1",
+      "label": "합판",
+      "count": 4,
+      "attributes": {
+        "state": [
+          "적치 중"
+        ]
+      },
+      "location": "화면 좌측 상단과 중앙 상부"
+    },
+    {
+      "id": "material_group_1",
+      "label": "기타자재",
+      "count": 8,
+      "attributes": {
+        "state": [
+          "적치 중"
+        ]
+      },
+      "location": "화면 중앙과 우측의 목재 자재 더미"
     },
     {
       "id": "formwork_group_1",
       "label": "거푸집",
-      "count": 3,
+      "count": 5,
       "attributes": {
         "state": [
-          "적치됨"
+          "적치 중"
         ]
       },
-      "location": "화면 좌측 중단과 중앙 일대"
+      "location": "화면 중앙 좌측의 갈색 적치물"
     },
     {
-      "id": "material_group_1",
-      "label": "자재",
-      "count": 8,
-      "attributes": {
-        "state": [
-          "적치됨"
-        ]
-      },
-      "location": "화면 중앙 전반과 우측 중단"
-    },
-    {
-      "id": "rebar_1",
-      "label": "철근",
+      "id": "prop_group_1",
+      "label": "동바리",
       "attributes": {
         "state": [
           "설치됨"
         ]
       },
-      "location": "화면 우측 상단 바닥 전반"
+      "location": "화면 하단 전반"
+    },
+    {
+      "id": "platform_group_1",
+      "label": "작업발판",
+      "count": 3,
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "화면 하단 중앙 동바리 상부"
     }
   ],
   "relationships": [
     {
-      "sub_id": "worker_group_1",
-      "predicate": "too_close_to",
-      "obj_id": "opening_group_1",
-      "category": "safety",
+      "sub_id": "worker_4",
+      "predicate": "walking_on",
+      "obj_id": "material_group_1",
+      "category": "functional",
       "score": 0.95,
-      "evidence": "상단 중앙의 근로자들이 개구부 가장자리 바로 옆에서 작업하고 있다."
+      "evidence": "중앙 좌측 근로자가 적치된 목재 자재 위에 발을 딛고 이동하는 모습이 보인다."
+    },
+    {
+      "sub_id": "worker_5",
+      "predicate": "inside",
+      "obj_id": "prop_group_1",
+      "category": "structural",
+      "score": 0.98,
+      "evidence": "하단 우측 근로자가 동바리 프레임 내부 통로에 위치해 있다."
+    },
+    {
+      "sub_id": "platform_group_1",
+      "predicate": "supported_by",
+      "obj_id": "prop_group_1",
+      "category": "structural",
+      "score": 0.97,
+      "evidence": "하단 중앙의 작업발판이 아래 동바리 구조 위에 놓여 있다."
+    },
+    {
+      "sub_id": "worker_1",
+      "predicate": "next_to",
+      "obj_id": "opening_group_1",
+      "category": "spatial",
+      "score": 0.92,
+      "evidence": "상단 중앙 좌측 근로자가 슬래브 개구부 가장자리 바로 옆에 서 있다."
     },
     {
       "sub_id": "worker_2",
+      "predicate": "next_to",
+      "obj_id": "opening_group_1",
+      "category": "spatial",
+      "score": 0.94,
+      "evidence": "상단 중앙 우측 근로자가 개구부 연속 구간 옆에서 작업하고 있다."
+    },
+    {
+      "sub_id": "worker_3",
       "predicate": "working_on",
       "obj_id": "material_group_1",
       "category": "functional",
       "score": 0.88,
-      "evidence": "중앙 좌측 근로자가 적치된 목재 자재 위에서 몸을 굽혀 작업하고 있다."
-    },
-    {
-      "sub_id": "worker_3",
-      "predicate": "carrying",
-      "obj_id": "formwork_group_1",
-      "category": "functional",
-      "score": 0.93,
-      "evidence": "중앙 우측 근로자가 검은 패널 형태의 거푸집 자재를 손으로 들고 있다."
-    },
-    {
-      "sub_id": "worker_4",
-      "predicate": "next_to",
-      "obj_id": "prop_group_1",
-      "category": "spatial",
-      "score": 0.86,
-      "evidence": "우측 하단 근로자가 설치된 동바리 바로 옆 통로를 지나가고 있다."
-    },
-    {
-      "sub_id": "material_group_1",
-      "predicate": "on",
-      "obj_id": "prop_group_1",
-      "category": "structural",
-      "score": 0.91,
-      "evidence": "하단 중앙의 긴 목재 자재 더미가 동바리 상부에 올려져 있다."
-    },
-    {
-      "sub_id": "rebar_1",
-      "predicate": "next_to",
-      "obj_id": "opening_group_1",
-      "category": "spatial",
-      "score": 0.82,
-      "evidence": "우측 상단의 철근 배근 구간이 상단 중앙 개구부 구간과 맞닿아 있다."
+      "evidence": "중앙 우측 근로자가 목재 자재 더미 옆에서 자재를 다루는 자세를 보인다."
     }
   ],
   "hazards": [
     {
       "related_object_ids": [
-        "worker_group_1",
+        "worker_1",
         "opening_group_1"
       ],
       "hazard": "추락",
-      "reason": "상단 중앙 근로자들이 노출된 개구부 가장자리 바로 옆에서 작업하고 있다."
+      "reason": "상단 중앙 좌측 근로자가 노출된 슬래브 개구부 가장자리 가까이 서 있다."
     },
     {
       "related_object_ids": [
-        "worker_3",
-        "material_group_1"
+        "worker_2",
+        "opening_group_1"
       ],
-      "hazard": "충돌",
-      "reason": "중앙 우측 근로자가 적치 자재 사이에서 큰 패널을 들고 이동하고 있어 주변 자재와 부딪힐 수 있다."
+      "hazard": "추락",
+      "reason": "상단 중앙 우측 근로자가 개방된 개구부 옆에서 작업하고 있다."
     }
   ]
 }

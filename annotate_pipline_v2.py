@@ -171,6 +171,19 @@ Rules:
 - If 2+ objects are visible, there should usually be at least 1 relationship.
 - Equipment working together (e.g., excavator + dump truck) MUST have a relationship like "loading".
 
+Direction rules:
+- functional: the actor, worker, equipment, or moving/handled item is sub_id; the target object is obj_id.
+- structural "on"/"inside": the object or person located on/inside is sub_id; the support/container is obj_id.
+- structural "attached_to"/"supported_by"/"connected_to": the smaller or dependent object is sub_id; the supporting/primary object is obj_id.
+- safety: the worker, moving equipment, or at-risk object is sub_id; the hazard source, edge, equipment, or blocked object is obj_id.
+- spatial: if the relation is symmetric, use the visually more important object as sub_id; if importance is equal, use left-to-right order.
+- Keep direction consistent across similar scenes so graph embeddings can compare edges reliably.
+
+Spatial relationship filtering:
+- Spatial relationships should describe meaningful scene layout, safety context, or work context.
+- Avoid redundant next_to edges between many nearby static objects when they do not change scene meaning.
+- Prefer safety, functional, and structural edges over plain spatial edges whenever both are visually valid for the same object pair.
+
 Relationship extraction strategy — check in order:
 1. Worker ↔ Equipment: operating, approaching, too_close_to?
 2. Worker ↔ Structure/Edge: on, walking_on, too_close_to?
@@ -258,7 +271,7 @@ Step-by-step:
 
 3. Identify heavy equipment by defining visual features (boom-arm-bucket = 굴착기, fork prongs = 지게차, tower+jib = 타워크레인, vehicle-mounted boom = 이동식크레인, tiltable bed = 덤프트럭, cylindrical drum = 로드롤러, rotating drum on truck = 레미콘, folding pump boom = 콘크리트펌프카, front blade = 불도저, front bucket on wheels = 로더, tall vertical leads = 항타기, elevated platform = 고소작업차).
 
-4. ADD RELATIONSHIPS — For every pair of nearby objects, determine the single best relationship. Pick the highest-priority category (safety > functional > structural > spatial). Assign a confidence score and one-sentence Korean evidence.
+4. ADD RELATIONSHIPS — For every meaningful nearby or interacting object pair, determine the single best relationship. Pick the highest-priority category (safety > functional > structural > spatial), keep edge direction consistent with the direction rules, avoid redundant spatial-only edges, and assign a confidence score plus one-sentence Korean evidence.
 
 5. CHECK HAZARDS — For 추락: confirm BOTH (a) worker at height AND (b) clearly visible absence of guardrail, OR worker on narrow open-sided platform at height. For 충돌: require operating/moving equipment, not static material.
 
@@ -270,8 +283,8 @@ Output valid JSON only."""
 
 MODEL = "gpt-5.4"
 IMAGE_DIR = "sample_data"
-OUTPUT_DIR = "sample_output_v2"
-MAX_IMAGES = 10
+OUTPUT_DIR = "sample_output"
+MAX_IMAGES = 5
 MAX_RETRIES = 3
 RETRY_DELAY = 5
 

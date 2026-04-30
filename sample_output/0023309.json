@@ -1,16 +1,32 @@
 {
-  "scene_description": "좌측에 다층 비계와 작업발판이 설치된 콘크리트구조물이 보인다. 상부 작업발판 위에 근로자 1명이 서 있다. 중앙에는 가설울타리와 자재가 놓여 있고, 우측 하단에는 소형 콘크리트 믹서로 보이는 장비가 있다.",
+  "scene_description": "좌측에 다층 비계와 거푸집 구조가 설치되어 있다. 상부 작업발판에 근로자 1명이 서 있다. 중앙 하단에는 근로자 1명이 자재 더미 옆에 있다. 우측 하단에는 소형 장비와 레미콘이 보이며, 중앙에는 파이프와 임시지보가 세워져 있다.",
   "objects": [
     {
-      "id": "structure_1",
-      "label": "콘크리트구조물",
+      "id": "worker_1",
+      "label": "근로자",
       "attributes": {
-        "state": []
+        "ppe": [],
+        "state": [
+          "서 있음"
+        ]
       },
-      "location": "화면 좌측 전반"
+      "location": "좌측 상단 비계 상부 작업발판"
     },
     {
-      "id": "scaffold_1",
+      "id": "worker_2",
+      "label": "근로자",
+      "attributes": {
+        "ppe": [
+          "안전모"
+        ],
+        "state": [
+          "앉아 있음"
+        ]
+      },
+      "location": "중앙 하단 비계 옆 자재 더미 앞"
+    },
+    {
+      "id": "scaffold_group_1",
       "label": "비계",
       "attributes": {
         "state": [
@@ -27,39 +43,39 @@
           "설치됨"
         ]
       },
-      "location": "화면 좌측 상단 비계 내부"
+      "location": "좌측 상단 비계 상부"
     },
     {
-      "id": "worker_1",
-      "label": "근로자",
-      "attributes": {
-        "ppe": [],
-        "state": [
-          "서 있음"
-        ]
-      },
-      "location": "화면 좌측 상단 작업발판 위"
-    },
-    {
-      "id": "temp_fence_1",
-      "label": "가설울타리",
+      "id": "formwork_group_1",
+      "label": "거푸집",
       "attributes": {
         "state": [
           "설치됨"
         ]
       },
-      "location": "화면 중앙 세로 방향"
+      "location": "좌측 중단 비계 내부"
     },
     {
-      "id": "material_group_1",
-      "label": "자재",
-      "count": 3,
+      "id": "pipe_group_1",
+      "label": "파이프",
+      "count": 2,
       "attributes": {
         "state": [
           "적치됨"
         ]
       },
-      "location": "화면 중앙 하단 가설울타리 옆"
+      "location": "중앙 하단 worker_2 오른쪽"
+    },
+    {
+      "id": "temp_support_group_1",
+      "label": "임시지보",
+      "count": 4,
+      "attributes": {
+        "state": [
+          "설치됨"
+        ]
+      },
+      "location": "중앙 세로 통로 일대"
     },
     {
       "id": "mixer_1",
@@ -69,49 +85,69 @@
           "정지"
         ]
       },
-      "location": "화면 우측 하단"
+      "location": "우측 하단"
+    },
+    {
+      "id": "material_1",
+      "label": "기타자재",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "우측 중하단 주황색 장비 옆"
+    },
+    {
+      "id": "machine_1",
+      "label": "machine",
+      "attributes": {
+        "state": [
+          "정지"
+        ]
+      },
+      "location": "우측 중하단 주황색 장비"
     }
   ],
   "relationships": [
-    {
-      "sub_id": "scaffold_1",
-      "predicate": "attached_to",
-      "obj_id": "structure_1",
-      "category": "structural",
-      "score": 0.97,
-      "evidence": "비계가 좌측 콘크리트구조물 외측면을 따라 밀착 설치되어 있다."
-    },
-    {
-      "sub_id": "platform_1",
-      "predicate": "on",
-      "obj_id": "scaffold_1",
-      "category": "structural",
-      "score": 0.95,
-      "evidence": "작업발판이 비계 상부 구간 내부에 놓여 있다."
-    },
     {
       "sub_id": "worker_1",
       "predicate": "on",
       "obj_id": "platform_1",
       "category": "structural",
       "score": 0.98,
-      "evidence": "근로자가 좌측 상단 작업발판 위에 서 있는 모습이 보인다."
+      "evidence": "상부 작업발판 위에 근로자 1명이 서 있다."
     },
     {
-      "sub_id": "material_group_1",
-      "predicate": "next_to",
-      "obj_id": "temp_fence_1",
-      "category": "spatial",
-      "score": 0.9,
-      "evidence": "적치된 자재들이 중앙의 가설울타리 바로 옆에 모여 있다."
+      "sub_id": "platform_1",
+      "predicate": "attached_to",
+      "obj_id": "scaffold_group_1",
+      "category": "structural",
+      "score": 0.96,
+      "evidence": "작업발판이 좌측 비계 구조에 연결되어 있다."
     },
     {
-      "sub_id": "mixer_1",
+      "sub_id": "formwork_group_1",
+      "predicate": "inside",
+      "obj_id": "scaffold_group_1",
+      "category": "structural",
+      "score": 0.88,
+      "evidence": "거푸집이 비계 내부 구간에 배치되어 보인다."
+    },
+    {
+      "sub_id": "worker_2",
       "predicate": "next_to",
-      "obj_id": "temp_fence_1",
+      "obj_id": "pipe_group_1",
       "category": "spatial",
-      "score": 0.82,
-      "evidence": "우측 하단 장비가 중앙 가설울타리 오른쪽 가까이에 위치한다."
+      "score": 0.86,
+      "evidence": "중앙 하단의 근로자가 적치된 파이프 바로 옆에 있다."
+    },
+    {
+      "sub_id": "machine_1",
+      "predicate": "in_front_of",
+      "obj_id": "mixer_1",
+      "category": "spatial",
+      "score": 0.83,
+      "evidence": "주황색 장비가 우측 하단 레미콘의 좌상측 앞쪽에 놓여 있다."
     }
   ],
   "hazards": []
